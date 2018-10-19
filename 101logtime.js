@@ -3,10 +3,12 @@
 // @name         101_Logtime
 // @namespace    http://tampermonkey.net/
 // @version      1.10.1
-// @description  Display your monthly logtime and the last 3 months, you have to install tampermonkey in order to use it at : https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=fr
+// @description  Affiche votre logtime du mois courant et des 3 mois précédents, avant d'installer ce script il faut tout d'abord avoir l'extension tampermonkey ## LIEN TAMPERMONKEY : https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=fr
 // @author       Grégoire Hazette
 // @match        https://profile.intra.42.fr/
 // @match        https://profile.intra.42.fr/users/*
+// @downloadURL  https://openuserjs.org/install/ghazette/101_Logtime.user.js
+// @updateURL  https://openuserjs.org/install/ghazette/101_Logtime.user.js
 // @run-at       document-end
 // @license MIT
 // ==/UserScript==
@@ -46,6 +48,7 @@ function get_Logtime() {
   let year = date.getYear() + 1900;
   let regexp = new RegExp(year + "-" + month + "-[0-9]{2}");
   let parsed = getJSON("https://profile.intra.42.fr/users/" + getLogin() + "/locations_stats.json");
+  let Logtime = 0;
   let hours = 0;
   let minutes = 0;
   let seconds = 0;
@@ -86,13 +89,14 @@ function get_logtime_prev() {
   let hours = 0;
   let minutes = 0;
   let seconds = 0;
+
   while (i < 3) {
     if (month === 0)
       month = 12;
     if (month < 10)
       month = "0" + month;
     let regexp = new RegExp(month + "-[0-9]{2}");
-    let logtime = [];
+    let logtime = 0;
     for (let key in parsed) {
       if (key.match(regexp)) {
         let time = (parsed[key]).split(":");
@@ -123,6 +127,7 @@ function get_logtime_prev() {
     seconds = 0;
     i++;
   }
+
   return Logtime;
 }
 
